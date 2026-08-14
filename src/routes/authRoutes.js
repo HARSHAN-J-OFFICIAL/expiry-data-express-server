@@ -66,4 +66,31 @@ router.post('/register', registerValidators, authController.register);
  */
 router.post('/login', loginValidators, authController.login);
 
+/**
+ * @openapi
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user and clear authentication cookie
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User logged out successfully
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post('/logout', authController.logout);
+
 module.exports = router;

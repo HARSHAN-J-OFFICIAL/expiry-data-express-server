@@ -116,6 +116,25 @@ const authController = {
                 message: 'Internal server error'
             });
         }
+    },
+
+    logout: async (request, response) => {
+        try {
+            response.clearCookie('jwtToken', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                path: '/'
+            });
+
+            return response.status(200).json({
+                message: 'User logged out successfully'
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+            return response.status(500).json({
+                message: 'Internal server error'
+            });
+        }
     }
 };
 
