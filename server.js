@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./src/config/db');
 const setupSwagger = require('./src/config/swagger');
 const authRoutes = require('./src/routes/authRoutes');
+const productRoutes = require('./src/routes/productRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -13,7 +14,10 @@ const PORT = process.env.PORT || 5001;
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -23,6 +27,7 @@ setupSwagger(app);
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/products', productRoutes);
 
 // Base Health Check Route
 app.get('/health', (req, res) => {

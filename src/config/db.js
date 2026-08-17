@@ -16,6 +16,24 @@ const connectDB = async () => {
             const uri = mongoServer.getUri();
             const conn = await mongoose.connect(uri);
             console.log(`In-Memory MongoDB Connected Successfully: ${conn.connection.host}`);
+            
+            // Auto-seed default test user for seamless login during dev
+            try {
+                const User = require('../models/user');
+                const bcrypt = require('bcryptjs');
+                const existingUser = await User.findOne({ email: 'testuser@example.com' });
+                if (!existingUser) {
+                    const hashedPassword = await bcrypt.hash('password123', 10);
+                    await User.create({
+                        name: 'Test User',
+                        email: 'testuser@example.com',
+                        password: hashedPassword
+                    });
+                    console.log('⚡ Auto-seeded demo account: testuser@example.com / password123');
+                }
+            } catch (seedErr) {
+                console.warn('Seed account warning:', seedErr.message);
+            }
         } catch (fallbackError) {
             console.error(`MongoDB Fallback Failed: ${fallbackError.message}`);
             process.exit(1);
