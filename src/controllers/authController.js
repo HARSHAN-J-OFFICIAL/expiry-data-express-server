@@ -41,9 +41,12 @@ const authController = {
                 { expiresIn: '1h' }
             );
 
+            const isProduction = process.env.NODE_ENV === 'production';
+
             response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: isProduction,
+                sameSite: isProduction ? 'none' : 'lax',
                 path: '/'
             });
 
@@ -90,9 +93,12 @@ const authController = {
                     { expiresIn: '1h' }
                 );
 
+                const isProduction = process.env.NODE_ENV === 'production';
+
                 response.cookie('jwtToken', token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: isProduction,
+                    sameSite: isProduction ? 'none' : 'lax',
                     path: '/'
                 });
 
@@ -120,9 +126,12 @@ const authController = {
 
     logout: async (request, response) => {
         try {
+            const isProduction = process.env.NODE_ENV === 'production';
+
             response.clearCookie('jwtToken', {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: isProduction,
+                sameSite: isProduction ? 'none' : 'lax',
                 path: '/'
             });
 
